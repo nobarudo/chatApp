@@ -4,24 +4,30 @@
   <title>ベーす</title>
   <!-- 共通のCSSなど -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
   <!-- 共通のJSなど -->
 </head>
 <body>
 <div>
   <h1>チャットアプリ</h1>
 
-<div class="text-center">
-<pre id="chat"></pre>
-<label id="title"></label>
-<input placeholder="say something" id="text" type="text">
-</div>
+  <div class="container" id="chatArea">
+    <p id="chat"></p>
+  </div>
+  <footer class="fixed-bottom">
+    <div class="footer">
+      <label id="title"></label>
+      <input placeholder="say something" class="text" id="text" type="text">
+      <br></br>
+    </div>
+  </footer>
 <script>
 var url = "ws://" + window.location.host +"/ws";
 var ws = new WebSocket(url);
 var name = {{.userName}}
 //var name = "Guest-" + Math.floor(Math.random() * 1000);
 var chat = document.getElementById("chat");
-document.getElementById("title").innerText = name + ": ";
+document.getElementById("title").innerText = "ユーザ名："+ name;
 
 var text = document.getElementById("text");
 var now = function() {

@@ -1,0 +1,19 @@
+.text {
+  bottom: 5%;
+  width: 95%;
+  left: 10%;
+  right: 10%;
+  padding: 5px;
+  margin: 10px;
+}
+
+#fixed-bottom {
+}
+
+.footer {
+  background-color: #ffffff;
+}
+
+#chatArea {
+  margin-bottom:140px;
+}

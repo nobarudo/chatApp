@@ -3,14 +3,15 @@ package main
 import (
   "log"
   "net/http"
-  "github.com/gin-gonic/gin"
   "html/template"
+  "github.com/gin-gonic/gin"
   "gopkg.in/olahol/melody.v1"
   //"github.com/gin-gonic/contrib/renders/multitemplate"
 )
 
 func main() {
   router := gin.Default()
+  router.Static("/assets", "./assets")
   router.LoadHTMLGlob("templates/*.tmpl")
   m := melody.New()
 
@@ -21,14 +22,16 @@ func main() {
   })
 
   router.POST("/chat", func(c *gin.Context) {
-    test := c.PostForm("userName")
-    log.Printf("debug:", test)
+    name := c.PostForm("userName")
     html := template.Must(template.ParseFiles("templates/base.tmpl", "templates/chat.tmpl"))
     router.SetHTMLTemplate(html)
+    log.Println("新しいユーザが参加しました. userName:", name)
+    systemMsg := []byte("[システム] > "+name+"が参加しました. ")
+    m.Broadcast(systemMsg)
     //templates := multitemplate.New()
     //templates.AddFromFiles("contact", "templates/base.tmpl", "templates/chat.tmpl")
     c.HTML(200, "chat.tmpl", gin.H{
-      "userName": test,
+      "userName": name,
     })
   })
 
@@ -41,6 +44,7 @@ func main() {
   })
 
   m.HandleMessage(func(s *melody.Session, msg []byte) {
+    log.Printf("messege:%s", msg)
     m.Broadcast(msg)
   })
 
