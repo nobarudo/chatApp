@@ -1,19 +1,23 @@
 .text {
   bottom: 5%;
   width: 95%;
-  left: 10%;
-  right: 10%;
-  padding: 5px;
+  padding: 10px;
   margin: 10px;
 }
 
-#fixed-bottom {
-}
+//.footer {
+//  background-color: #ffffff;
+//}
 
-.footer {
+.fixed-bottom {
   background-color: #ffffff;
 }
 
+.inputText {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
 #chatArea {
-  margin-bottom:140px;
+  margin-bottom: 150px;
 }
