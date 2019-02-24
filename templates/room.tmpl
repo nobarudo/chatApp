@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>ベーす</title>
+  <!-- 共通のCSSなど -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+  <!-- 共通のJSなど -->
+</head>
+<body>
+<div>
+  <h1>チャットアプリ</h1>
+
+  <div class="container" id="chatArea">
+    <p id="chat"></p>
+  </div>
+  <footer class="fixed-bottom">
+    <div class="footer">
+      <label id="title"></label>
+      <div class="inputText">
+        <input placeholder="say something" class="text" id="text" type="text">
+      </div>
+    </div>
+  </footer>
+<script>
+var url = "ws://" + window.location.host +"/ws{{.id}}";
+var ws = new WebSocket(url);
+var name = {{.userName}}
+//var name = "Guest-" + Math.floor(Math.random() * 1000);
+var chat = document.getElementById("chat");
+document.getElementById("title").innerText = "ユーザ名："+ name;
+
+var text = document.getElementById("text");
+var now = function() {
+  return new Date().toLocaleString();
+};
+
+ws.onmessage = function (msg) {
+  var line = now() + " : " + msg.data + "\n";
+  chat.innerText += line;
+};
+
+text.onkeydown = function (e) {
+  if (e.keyCode === 13 && text.value !== "") {
+    ws.send("[" + name + "] > " + text.value);
+    text.value = "";
+  }
+};
+
+</script>
+
+</div>
+</body>
+</html>

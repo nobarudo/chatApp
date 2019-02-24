@@ -24,6 +24,27 @@ func main() {
     c.HTML(200, "base.tmpl", gin.H{})
   })
 
+  router.GET("/room/:id", func(c *gin.Context) {
+    name := "test"
+    html := template.Must(template.ParseFiles("templates/base.tmpl", "templates/room.tmpl"))
+    router.SetHTMLTemplate(html)
+    Id := c.Param("id")
+
+    session := sessions.Default(c)
+    session.Set("name", name)
+    session.Save()
+
+    log.Println("新しいユーザが参加しました. userName:", name)
+    systemMsg := []byte("[システム] > "+name+"が参加しました. ")
+    m.Broadcast(systemMsg)
+    //templates := multitemplate.New()
+    //templates.AddFromFiles("contact", "templates/base.tmpl", "templates/chat.tmpl")
+    c.HTML(200, "room.tmpl", gin.H{
+      "userName": name,
+      "id" : Id,
+    })
+  })
+
   router.POST("/chat", func(c *gin.Context) {
     name := c.PostForm("userName")
     html := template.Must(template.ParseFiles("templates/base.tmpl", "templates/chat.tmpl"))
@@ -48,6 +69,16 @@ func main() {
   })
 
   router.GET("/ws", func(c *gin.Context) {
+    session := sessions.Default(c)
+    name := session.Get("name")
+    temp := name.(string)
+    systemMsg := []byte("[システム] > "+temp+"が退出しました. ")
+    m.HandleRequest(c.Writer, c.Request)
+    log.Println("debug:", name)
+    m.Broadcast(systemMsg)
+  })
+
+  router.GET("/ws:id", func(c *gin.Context) {
     session := sessions.Default(c)
     name := session.Get("name")
     temp := name.(string)
